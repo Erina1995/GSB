@@ -1,0 +1,17 @@
+﻿<?php
+
+$action = $_REQUEST['action'];
+switch($action)
+{
+	case 'voirEtatFrais':{
+		$leMois = $_REQUEST['lstMois'];
+		$lesMois=$pdo->getLesMois();
+		$moisASelectionner = $leMois;
+		include("vues/v_listeMois.php");
+		$lesFichesFrais = $pdo->getLesFichesFrais($leMois);
+		$numAnnee =substr( $leMois,0,4);
+		$numMois =substr( $leMois,4,2);
+		include("vues/v_remboursementFrais.php");
+	}
+}
+?>

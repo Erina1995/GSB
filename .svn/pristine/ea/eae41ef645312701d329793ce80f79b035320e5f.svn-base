@@ -1,0 +1,194 @@
+﻿<?php
+include ("vues/v_sommaire.php");
+
+$action = $_REQUEST ['action'];
+$idVisiteur = $_SESSION ['idVisiteur'];
+
+switch ($action) {
+	case 'selectionnerVisiteur' :
+		{
+			$idAutreVisiteur = - 1;
+			$leMois = - 1;
+			
+			$lesMois = $pdo->getLesMoisDisponibles ( $idVisiteur );
+			$lesVisiteurs = $pdo->getLesVisiteurs ();
+			include ("vues/v_validationFrais.php");
+			break;
+		}
+	
+	case 'voirEtatFrais' :
+		{
+			$leMois = $_REQUEST ['lstMois'];
+			$idAutreVisiteur = $_REQUEST ['lstVis'];
+			
+			$lesMois = $pdo->getLesMois ();
+			$lesVisiteurs = $pdo->getLesVisiteurs ();
+			
+			include ("vues/v_validationFrais.php");
+			
+			$lesFraisHorsForfait = $pdo->getLesFraisHorsForfait ( $idAutreVisiteur, $leMois );
+			$lesFraisForfait = $pdo->getLesFraisForfait ( $idAutreVisiteur, $leMois );
+			$lesInfosFicheFrais = $pdo->getLesInfosFicheFrais ( $idVisiteur, $leMois );
+			
+			$lesInfosFicheFrais = $pdo->getLesInfosFicheFrais ( $idAutreVisiteur, $leMois );
+			
+			$numAnnee = substr ( $leMois, 0, 4 );
+			$numMois = substr ( $leMois, 4, 2 );
+			
+			$libEtat = $lesInfosFicheFrais ['libEtat'];
+			$montantValide = $lesInfosFicheFrais ['montantValide'];
+			$nbJustificatifs = $lesInfosFicheFrais ['nbJustificatifs'];
+			$dateModif = $lesInfosFicheFrais ['dateModif'];
+			$dateModif = dateAnglaisVersFrancais ( $dateModif );
+			
+			include ("vues/v_etatFrais.php");
+			break;
+		}
+	
+	case 'valideEtatFrais' :
+		{
+			$etp = $_REQUEST ['ETP'];
+			$km = $_REQUEST ['KM'];
+			$nui = $_REQUEST ['NUI'];
+			$rep = $_REQUEST ['REP'];
+			
+			$idAutreVisiteur = $_REQUEST ['lstVis'];
+			$leMois = $_REQUEST ['lstMois'];
+			
+			$pdo->majInfoFraisForfaitise ( $idAutreVisiteur, $etp, $km, $nui, $rep );
+			
+			$lesVisiteurs = $pdo->getLesVisiteurs ();
+			
+			
+			
+			$lesMois = $pdo->getLesMois ();
+			
+			include ("vues/v_validationFrais.php");
+			
+			$lesFraisHorsForfait = $pdo->getLesFraisHorsForfait ( $idAutreVisiteur, $leMois );
+			
+			$lesFraisForfait = $pdo->getLesFraisForfait ( $idAutreVisiteur, $leMois );
+			
+			$lesInfosFicheFrais = $pdo->getLesInfosFicheFrais ( $idAutreVisiteur, $leMois );
+			
+			$numAnnee = substr ( $leMois, 0, 4 );
+			$numMois = substr ( $leMois, 4, 2 );
+			
+			$libEtat = $lesInfosFicheFrais ['libEtat'];
+			$montantValide = $lesInfosFicheFrais ['montantValide'];
+			$nbJustificatifs = $lesInfosFicheFrais ['nbJustificatifs'];
+			$dateModif = $lesInfosFicheFrais ['dateModif'];
+			$dateModif = dateAnglaisVersFrancais ( $dateModif );
+			
+			include ("vues/v_etatFrais.php");
+			
+			break;
+		}
+	
+	case 'refuserFraisHorsForfait' :
+		{
+			$idFrais=$_REQUEST['id'];
+			$pdo->refuserFrais($idFrais);
+			
+			$lesVisiteurs = $pdo->getLesVisiteurs ();
+				
+			$idAutreVisiteur = $_REQUEST ['lstVis'];
+			$leMois = $_REQUEST ['lstMois'];
+				
+			$lesMois = $pdo->getLesMois ();
+				
+			include ("vues/v_validationFrais.php");
+				
+			$lesFraisHorsForfait = $pdo->getLesFraisHorsForfait ( $idAutreVisiteur, $leMois );
+				
+			$lesFraisForfait = $pdo->getLesFraisForfait ( $idAutreVisiteur, $leMois );
+				
+			$lesInfosFicheFrais = $pdo->getLesInfosFicheFrais ( $idAutreVisiteur, $leMois );
+				
+			$numAnnee = substr ( $leMois, 0, 4 );
+			$numMois = substr ( $leMois, 4, 2 );
+				
+			$libEtat = $lesInfosFicheFrais ['libEtat'];
+			$montantValide = $lesInfosFicheFrais ['montantValide'];
+			$nbJustificatifs = $lesInfosFicheFrais ['nbJustificatifs'];
+			$dateModif = $lesInfosFicheFrais ['dateModif'];
+			$dateModif = dateAnglaisVersFrancais ( $dateModif );
+				
+			include ("vues/v_etatFrais.php");
+			
+			break;
+		}
+		
+	case 'validerFicheFrais' :
+		{
+			$lesVisiteurs = $pdo->getLesVisiteurs ();
+				
+			$idAutreVisiteur = $_REQUEST ['lstVis'];
+			$leMois = $_REQUEST ['lstMois'];
+			
+			$pdo->validerFiche($idAutreVisiteur);
+					
+			$lesMois = $pdo->getLesMois ();
+				
+			include ("vues/v_validationFrais.php");
+				
+			$lesFraisHorsForfait = $pdo->getLesFraisHorsForfait ( $idAutreVisiteur, $leMois );
+				
+			$lesFraisForfait = $pdo->getLesFraisForfait ( $idAutreVisiteur, $leMois );
+				
+			$lesInfosFicheFrais = $pdo->getLesInfosFicheFrais ( $idAutreVisiteur, $leMois );
+				
+			$numAnnee = substr ( $leMois, 0, 4 );
+			$numMois = substr ( $leMois, 4, 2 );
+				
+			$libEtat = $lesInfosFicheFrais ['libEtat'];
+			$montantValide = $lesInfosFicheFrais ['montantValide'];
+			$nbJustificatifs = $lesInfosFicheFrais ['nbJustificatifs'];
+			$dateModif = $lesInfosFicheFrais ['dateModif'];
+			$dateModif = dateAnglaisVersFrancais ( $dateModif );
+				
+			include ("vues/v_etatFrais.php");
+			
+			break;
+		}
+	
+	case 'reporterFraisHorsForfait':
+		{
+			$idFrais=$_REQUEST['id'];
+			
+			$lesVisiteurs = $pdo->getLesVisiteurs ();
+				
+			$idAutreVisiteur = $_REQUEST ['lstVis'];
+			$leMois = $_REQUEST ['lstMois'];
+			
+			
+			
+			$pdo->reporterFrais($idFrais,$idAutreVisiteur);
+			$pdo->creeNouvellesLignesFrais($idAutreVisiteur,$leMois);
+				
+			$lesMois = $pdo->getLesMois ();
+				
+			include ("vues/v_validationFrais.php");
+				
+			$lesFraisHorsForfait = $pdo->getLesFraisHorsForfait ( $idAutreVisiteur, $leMois );
+				
+			$lesFraisForfait = $pdo->getLesFraisForfait ( $idAutreVisiteur, $leMois );
+				
+			$lesInfosFicheFrais = $pdo->getLesInfosFicheFrais ( $idAutreVisiteur, $leMois );
+				
+			$numAnnee = substr ( $leMois, 0, 4 );
+			$numMois = substr ( $leMois, 4, 2 );
+				
+			$libEtat = $lesInfosFicheFrais ['libEtat'];
+			$montantValide = $lesInfosFicheFrais ['montantValide'];
+			$nbJustificatifs = $lesInfosFicheFrais ['nbJustificatifs'];
+			$dateModif = $lesInfosFicheFrais ['dateModif'];
+			$dateModif = dateAnglaisVersFrancais ( $dateModif );
+				
+			include ("vues/v_etatFrais.php");
+			
+			break;
+			
+		}
+}
+?>
